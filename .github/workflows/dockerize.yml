@@ -13,7 +13,6 @@ jobs:
 
     permissions:
       contents: read
-      packages: write
 
     steps:
       - name: Checkout code
@@ -38,8 +37,17 @@ jobs:
           tags: ghcr.io/stephen-hallett/scopus-check:latest
           platforms: linux/amd64
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    if: github.event_name == 'push'  && success() || github.event_name == 'workflow_dispatch'
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
       - name: Build and push Docker image
-        if: github.event_name == 'push' && success() || github.event_name == 'workflow_dispatch'
         uses: docker/build-push-action@v5
         with:
           context: ./
@@ -54,7 +62,7 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:gh-ci
 
-      - name: Do the deploy thing
+      - name: Redeploy App
         run: |
           ssh -o "StrictHostKeyChecking no" ${{ secrets.VPS_USER }}@scopus-check "
             podman pull ghcr.io/stephen-hallett/scopus-check:latest
