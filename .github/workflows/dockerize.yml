@@ -46,3 +46,17 @@ jobs:
           push: true
           tags: ghcr.io/stephen-hallett/scopus-check:latest
           platforms: linux/amd64
+
+      - name: Connect Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:gh-ci
+
+      - name: Do the deploy thing
+        run: |
+          ssh -o "StrictHostKeyChecking no" ${{ secrets.VPS_USER }}@scopus-check "
+            podman pull ghcr.io/stephen-hallett/scopus-check:latest
+            podman restart scopus-check
+          "
