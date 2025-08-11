@@ -1,0 +1,8 @@
+[project]
+name = "scopus-check"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "pandas>=2.3.1",
+    "streamlit>=1.48.0",
+]
