@@ -6,7 +6,7 @@ st.set_page_config(page_title="Scopus Check", layout="wide")
 st.title("Scopus Check")
 
 
-def highlight_row(row):
+def highlight_row(row: pd.Series) -> list[str]:
     if row["detected"]:
         return ["background-color: #d4edda"] * len(row)  # green
     return ["background-color: #f8d7da"] * len(row)  # red
@@ -29,7 +29,7 @@ wanted = [
     "Is patient-centredness in European hospitals related to existing quality improvement strategies? Analysis of a cross-sectional survey (MARQuIS study)",
     "Reporting cancer patients' experiences of care for quality improvement: analysis of 2000 and 2004 survey results for South East England",
     "Cancer Experience of Care Improvement Collaboratives in the National Health Service in England",
-    "Making surgery safer in an increasingly digital world: the internet—friend or foe?",
+    #    "Making surgery safer in an increasingly digital world: the internet—friend or foe?",
 ]
 
 wanted_df = pd.DataFrame({"Wanted Papers": wanted})
