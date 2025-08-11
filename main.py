@@ -56,7 +56,14 @@ if uploaded is not None:
     results_col, wanted_col = st.columns([1, 1])
     with results_col:
         st.subheader("Results")
-        st.dataframe(scopus_results, use_container_width=True, height=700)
+        columns = list(scopus_results.columns)
+        columns.remove("Title")
+        st.dataframe(
+            scopus_results,
+            column_order=["Title", *columns],
+            use_container_width=True,
+            height=700,
+        )
 
     with wanted_col:
         st.subheader("Detected Papers")
